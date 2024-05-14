@@ -8,14 +8,10 @@ public enum CategoryEnum {
     FINANCE("Finance"),
     MOVIES("Movies");
 
+    @Getter
     private final String description;
 
     CategoryEnum(final String description){
         this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return description;
     }
 }

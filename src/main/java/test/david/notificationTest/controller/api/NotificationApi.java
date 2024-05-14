@@ -6,30 +6,34 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import test.david.notificationTest.dto.NotificationDTO;
-
-import java.util.List;
+import test.david.notificationTest.dto.SendNotificationDTO;
 
 @Validated
-@Tag(name = "logHistory", description = "Controller for history of logs")
+@Tag(name = "notification", description = "Controller for notification")
 @RestController
-public interface LogHistoryApi {
+public interface NotificationApi {
 
     /**
-     * Return an ordered list of log history from notifications
+     * Send a notification for the users
      */
-    @Operation(summary = "History of Logs",
-            operationId = "logHistory",
-            description = "History of Logs",
-            tags = {"logHistory"})
+    @Operation(summary = "Send Notification",
+            operationId = "sendNotification",
+            description = "Send Notification",
+            tags = {"notification"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "success",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid param",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))})})
-    @GetMapping("/logHistory")
-    ResponseEntity<List<NotificationDTO>> logHistory();
+    @PostMapping("/sendNotification")
+    ResponseEntity<String> sendNotification(@Valid @RequestBody SendNotificationDTO sendNotificationDTO);
 
 }

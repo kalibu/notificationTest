@@ -8,14 +8,11 @@ public enum NotificationTypeEnum {
     E_MAIL("E-Mail"),
     PUSH_NOTIFICATION("Push Notification");
 
+    @Getter
     private final String description;
 
     NotificationTypeEnum(final String description){
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return description;
-    }
 }

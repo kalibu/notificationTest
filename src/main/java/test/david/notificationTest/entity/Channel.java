@@ -11,7 +11,8 @@ import java.io.Serializable;
 public class Channel implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @SequenceGenerator(name = "channelsSeq", sequenceName = "CHANNELS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "channelsSeq")
     @Column(name = "channel_id")
     private Long id;
 

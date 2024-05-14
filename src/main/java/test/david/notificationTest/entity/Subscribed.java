@@ -11,7 +11,8 @@ import java.io.Serializable;
 public class Subscribed implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @SequenceGenerator(name = "subscribedSeq", sequenceName = "SUBSCRIBED_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "subscribedSeq")
     @Column(name = "subscribed_id")
     private Long id;
 
