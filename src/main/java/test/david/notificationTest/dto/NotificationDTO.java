@@ -1,11 +1,13 @@
 package test.david.notificationTest.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import test.david.notificationTest.entity.Notification;
 
 import java.text.SimpleDateFormat;
 
 @Data
+@AllArgsConstructor
 public class NotificationDTO {
 
     private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");

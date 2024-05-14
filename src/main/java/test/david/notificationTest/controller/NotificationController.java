@@ -21,7 +21,7 @@ public class NotificationController implements NotificationApi {
     public ResponseEntity<String> sendNotification(SendNotificationDTO sendNotificationDTO) {
 
         log.info(sendNotificationDTO.toString());
-        sendNotificationService.sendNotifications(sendNotificationDTO);
+        sendNotificationService.asyncSendNotifications(sendNotificationDTO);
 
         return ResponseEntity.ok("Notifications being sent");
     }

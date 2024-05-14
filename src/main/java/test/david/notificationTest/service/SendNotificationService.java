@@ -6,4 +6,6 @@ public interface SendNotificationService {
 
     void sendNotifications(final SendNotificationDTO dto);
 
+    void asyncSendNotifications(final SendNotificationDTO dto);
+
 }

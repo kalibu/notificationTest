@@ -21,16 +21,12 @@ public class NotificationAbstractFactory {
 
     public AbstractNotification getNotification(NotificationTypeEnum notificationTypeEnum){
 
-        switch (notificationTypeEnum){
-            case NotificationTypeEnum.PUSH_NOTIFICATION:
-                return pushNotificationNotification;
-            case NotificationTypeEnum.E_MAIL:
-                return emailNotification;
-            case NotificationTypeEnum.SMS:
-                return smsNotification;
-        }
+        return switch (notificationTypeEnum) {
+            case NotificationTypeEnum.PUSH_NOTIFICATION -> pushNotificationNotification;
+            case NotificationTypeEnum.E_MAIL -> emailNotification;
+            case NotificationTypeEnum.SMS -> smsNotification;
+        };
 
-        return null;
     }
 
 }

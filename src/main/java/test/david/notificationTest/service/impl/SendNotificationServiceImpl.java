@@ -2,6 +2,7 @@ package test.david.notificationTest.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import test.david.notificationTest.dto.SendNotificationDTO;
 import test.david.notificationTest.entity.Channel;
@@ -35,6 +36,21 @@ public class SendNotificationServiceImpl implements SendNotificationService {
     @Autowired
     private NotificationAbstractFactory notificationAbstractFactory;
 
+    /**
+     * Async call to send notification, that in the future can be changed into a queue, batch process, etc
+     * @param dto
+     */
+    @Override
+    @Async
+    public void asyncSendNotifications(final SendNotificationDTO dto) {
+        log.info("Starting async send notification");
+        sendNotifications(dto);
+    }
+
+    /**
+     * Send notification to all the users based on categories list
+     * @param dto
+     */
     @Override
     public void sendNotifications(final SendNotificationDTO dto){
 
@@ -49,15 +65,27 @@ public class SendNotificationServiceImpl implements SendNotificationService {
 
                 for (Notification notification : notifications) {
 
+                    //save history
                     notificationRepository.save(notification);
 
                     AbstractNotification notifyImpl = notificationAbstractFactory.getNotification(notification.getNotificationType());
-                    notifyImpl.notifySubscribed(notification.getUser(), notification.getMessage());
+                    if(notifyImpl != null) {
+                        notifyImpl.notifySubscribed(notification.getUser(), notification.getMessage());
+                    }else{
+                        //if by any reason the notification type doesn't has a implementation
+                        log.error("Error while sending a notifications for userId: {}, notificationType: {}", notification.getUser().getId(), notification.getNotificationType());
+                    }
                 }
             }
         }
     }
 
+    /**
+     * Get a list of notifications to be sent to the users
+     * @param subscribed
+     * @param message
+     * @return
+     */
     private List<Notification> getNotificationsForUser(final Subscribed subscribed, final String message) {
 
         List<Notification> notifications = new LinkedList<>();
