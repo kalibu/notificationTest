@@ -13,8 +13,8 @@ public class NotificationDTO {
     public NotificationDTO(final Notification notification){
         this.id = notification.getId();
         this.user = notification.getUser().getName();
-        this.category = notification.getCategory().getName();
-        this.notificationType = notification.getNotificationType().getName();
+        this.category = notification.getCategory().toString();
+        this.notificationType = notification.getNotificationType().toString();
         this.notificationDate = SDF.format(notification.getNotificationDate().getTime());
     }
 

@@ -4,16 +4,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.Assert;
 import test.david.notificationTest.dto.NotificationDTO;
-import test.david.notificationTest.entity.Category;
 import test.david.notificationTest.entity.Notification;
-import test.david.notificationTest.entity.NotificationType;
 import test.david.notificationTest.entity.User;
-import test.david.notificationTest.repository.CategoryRepository;
+import test.david.notificationTest.enums.CategoryEnum;
+import test.david.notificationTest.enums.NotificationTypeEnum;
 import test.david.notificationTest.repository.NotificationRepository;
-import test.david.notificationTest.repository.NotificationTypeRepository;
 import test.david.notificationTest.repository.UserRepository;
 
 import java.util.Calendar;
@@ -24,12 +21,6 @@ public class NotificationServiceTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private NotificationTypeRepository notificationTypeRepository;
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -46,18 +37,10 @@ public class NotificationServiceTest {
         user.setPhoneNumber("123321123");
         userRepository.save(user);
 
-        Category category = new Category();
-        category.setName("Sports");
-        categoryRepository.save(category);
-
-        NotificationType notificationType = new NotificationType();
-        notificationType.setName("SMS");
-        notificationTypeRepository.save(notificationType);
-
         Notification notificationOne = new Notification();
         notificationOne.setUser(user);
-        notificationOne.setCategory(category);
-        notificationOne.setNotificationType(notificationType);
+        notificationOne.setCategory(CategoryEnum.SPORTS);
+        notificationOne.setNotificationType(NotificationTypeEnum.SMS);
         Calendar c = Calendar.getInstance();
         c.add(Calendar.SECOND, -10);
         notificationOne.setNotificationDate(c);
@@ -65,8 +48,8 @@ public class NotificationServiceTest {
 
         Notification notificationTwo = new Notification();
         notificationTwo.setUser(user);
-        notificationTwo.setCategory(category);
-        notificationTwo.setNotificationType(notificationType);
+        notificationTwo.setCategory(CategoryEnum.SPORTS);
+        notificationTwo.setNotificationType(NotificationTypeEnum.SMS);
         notificationTwo.setNotificationDate(Calendar.getInstance());
         notificationRepository.save(notificationTwo);
 

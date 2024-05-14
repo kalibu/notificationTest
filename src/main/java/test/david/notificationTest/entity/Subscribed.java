@@ -2,6 +2,7 @@ package test.david.notificationTest.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import test.david.notificationTest.enums.CategoryEnum;
 
 import java.io.Serializable;
 
@@ -18,8 +19,8 @@ public class Subscribed implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(name = "category")
+    @Enumerated(EnumType.STRING)
+    private CategoryEnum category;
 
 }

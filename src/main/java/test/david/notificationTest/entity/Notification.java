@@ -3,6 +3,8 @@ package test.david.notificationTest.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import test.david.notificationTest.enums.CategoryEnum;
+import test.david.notificationTest.enums.NotificationTypeEnum;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -20,13 +22,13 @@ public class Notification implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(name = "category")
+    @Enumerated(EnumType.STRING)
+    private CategoryEnum category;
 
-    @ManyToOne
-    @JoinColumn(name = "notification_type_id")
-    private NotificationType notificationType;
+    @Column(name = "notification_type")
+    @Enumerated(EnumType.STRING)
+    private NotificationTypeEnum notificationType;
 
     @Column(name = "notification_date")
     @Temporal(TemporalType.TIMESTAMP)

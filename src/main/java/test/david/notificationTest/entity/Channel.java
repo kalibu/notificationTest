@@ -2,6 +2,7 @@ package test.david.notificationTest.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import test.david.notificationTest.enums.NotificationTypeEnum;
 
 import java.io.Serializable;
 
@@ -18,8 +19,8 @@ public class Channel implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "notification_type_id")
-    private NotificationType notificationType;
+    @Column(name = "notification_type")
+    @Enumerated(EnumType.STRING)
+    private NotificationTypeEnum notificationType;
 
 }
