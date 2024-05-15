@@ -1,2 +1,11 @@
-#Start environment
+#Start environment with database
 docker-compose -f docker-compose.yml up
+
+#DB
+1) access http://localhost:8080/ and
+2) connect to the db (connection user and pass on application.properties)
+3) run script to create DB: database_scripts.sql
+4) run script to add test data:  inserts_for_test.sql
+
+#Java
+execute the command line: mvn spring-boot:run
