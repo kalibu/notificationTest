@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import test.david.notificationTest.dto.NotificationDTO;
 import test.david.notificationTest.dto.SendNotificationDTO;
 
+import java.util.List;
+
 @Validated
 @Tag(name = "notification", description = "Controller for notification")
 @RestController
@@ -34,4 +36,16 @@ public interface NotificationApi {
     @PostMapping("/sendNotification")
     ResponseEntity<String> sendNotification(@Valid @RequestBody SendNotificationDTO sendNotificationDTO);
 
+    /**
+     * Return an ordered list of log history from notifications
+     */
+    @Operation(summary = "List of Categories",
+            operationId = "categoryList",
+            description = "List of Categories",
+            tags = {"notification"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "success",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))})})
+    @GetMapping("/categoryList")
+    ResponseEntity<List<String>> getCategoryList();
 }
