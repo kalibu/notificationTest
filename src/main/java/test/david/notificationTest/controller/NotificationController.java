@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import test.david.notificationTest.controller.api.NotificationApi;
 import test.david.notificationTest.dto.SendNotificationDTO;
+import test.david.notificationTest.dto.SendNotificationReturnDTO;
 import test.david.notificationTest.enums.CategoryEnum;
 import test.david.notificationTest.service.SendNotificationService;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -23,12 +23,12 @@ public class NotificationController implements NotificationApi {
     private SendNotificationService sendNotificationService;
 
     @Override
-    public ResponseEntity<String> sendNotification(SendNotificationDTO sendNotificationDTO) {
+    public ResponseEntity<SendNotificationReturnDTO> sendNotification(SendNotificationDTO sendNotificationDTO) {
 
         log.info(sendNotificationDTO.toString());
         sendNotificationService.asyncSendNotifications(sendNotificationDTO);
 
-        return ResponseEntity.ok("Notifications being sent");
+        return ResponseEntity.ok(new SendNotificationReturnDTO("Notifications being sent"));
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.david.notificationTest.dto.NotificationDTO;
 import test.david.notificationTest.dto.SendNotificationDTO;
+import test.david.notificationTest.dto.SendNotificationReturnDTO;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public interface NotificationApi {
             @ApiResponse(responseCode = "400", description = "Invalid param",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))})})
     @PostMapping("/sendNotification")
-    ResponseEntity<String> sendNotification(@Valid @RequestBody SendNotificationDTO sendNotificationDTO);
+    ResponseEntity<SendNotificationReturnDTO> sendNotification(@Valid @RequestBody SendNotificationDTO sendNotificationDTO);
 
     /**
      * Return an ordered list of log history from notifications
