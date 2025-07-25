@@ -11,7 +11,7 @@ public enum NotificationTypeEnum {
     @Getter
     private final String description;
 
-    NotificationTypeEnum(final String description){
+    NotificationTypeEnum(final String description) {
         this.description = description;
     }
 

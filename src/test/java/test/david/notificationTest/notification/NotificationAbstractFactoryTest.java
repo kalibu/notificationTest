@@ -16,21 +16,21 @@ public class NotificationAbstractFactoryTest {
     private NotificationAbstractFactory factory;
 
     @Test
-    public void assertPushNotificationFactory (){
+    public void assertPushNotificationFactory() {
         AbstractNotification notification = factory.getNotification(NotificationTypeEnum.PUSH_NOTIFICATION);
 
         Assertions.assertEquals(PushNotificationNotification.class, notification.getClass());
     }
 
     @Test
-    public void assertEmailFactory (){
+    public void assertEmailFactory() {
         AbstractNotification notification = factory.getNotification(NotificationTypeEnum.E_MAIL);
 
         Assertions.assertEquals(EmailNotification.class, notification.getClass());
     }
 
     @Test
-    public void assertSmsFactory (){
+    public void assertSmsFactory() {
         AbstractNotification notification = factory.getNotification(NotificationTypeEnum.SMS);
 
         Assertions.assertEquals(SmsNotification.class, notification.getClass());

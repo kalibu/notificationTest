@@ -19,7 +19,7 @@ public class NotificationAbstractFactory {
     @Autowired
     private SmsNotification smsNotification;
 
-    public AbstractNotification getNotification(NotificationTypeEnum notificationTypeEnum){
+    public AbstractNotification getNotification(NotificationTypeEnum notificationTypeEnum) {
 
         return switch (notificationTypeEnum) {
             case NotificationTypeEnum.PUSH_NOTIFICATION -> pushNotificationNotification;

@@ -8,7 +8,6 @@ import test.david.notificationTest.dto.SendNotificationDTO;
 import test.david.notificationTest.entity.Channel;
 import test.david.notificationTest.entity.Notification;
 import test.david.notificationTest.entity.Subscribed;
-import test.david.notificationTest.enums.CategoryEnum;
 import test.david.notificationTest.notification.AbstractNotification;
 import test.david.notificationTest.notification.NotificationAbstractFactory;
 import test.david.notificationTest.repository.ChannelRepository;
@@ -17,7 +16,6 @@ import test.david.notificationTest.repository.SubscribedRepository;
 import test.david.notificationTest.service.SendNotificationService;
 
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -38,6 +36,7 @@ public class SendNotificationServiceImpl implements SendNotificationService {
 
     /**
      * Async call to send notification, that in the future can be changed into a queue, batch process, etc
+     *
      * @param dto
      */
     @Override
@@ -47,62 +46,76 @@ public class SendNotificationServiceImpl implements SendNotificationService {
         sendNotifications(dto);
     }
 
-    /**
-     * Send notification to all the users based on categories list
-     * @param dto
-     */
     @Override
-    public void sendNotifications(final SendNotificationDTO dto){
+    public void sendNotifications(final SendNotificationDTO dto) {
+        log.info("Searching subscribers by category: {}", dto.getCategory());
 
-        for (CategoryEnum category : dto.getCategories()){
+        List<Subscribed> subscribers = subscribedRepository.findAllByCategory(dto.getCategory());
 
-            log.info("Searching subscriber by category {}", category);
-            List<Subscribed> subscribers = subscribedRepository.findAllByCategory(category);
+        if (subscribers.isEmpty()) {
+            log.warn("No subscribers found for category: {}", dto.getCategory());
+            return;
+        }
 
-            for (Subscribed subscribed : subscribers){
-
-                List<Notification> notifications = getNotificationsForUser(subscribed, dto.getMessage());
-
-                for (Notification notification : notifications) {
-
-                    //save history
-                    notificationRepository.save(notification);
-
-                    AbstractNotification notifyImpl = notificationAbstractFactory.getNotification(notification.getNotificationType());
-                    if(notifyImpl != null) {
-                        notifyImpl.notifySubscribed(notification.getUser(), notification.getMessage());
-                    }else{
-                        //if by any reason the notification type doesn't has a implementation
-                        log.error("Error while sending a notifications for userId: {}, notificationType: {}", notification.getUser().getId(), notification.getNotificationType());
-                    }
-                }
+        subscribers.forEach(subscribed -> {
+            try {
+                processNotificationsForSubscribed(subscribed, dto.getMessage());
+            } catch (Exception e) {
+                log.error("Failed to process notifications for userId: {}",
+                        subscribed.getUser().getId(), e);
             }
+        });
+    }
+
+    private void processNotificationsForSubscribed(Subscribed subscribed, String message) {
+        List<Channel> channels = channelRepository.findAllByUserId(subscribed.getUser().getId());
+
+        if (channels.isEmpty()) {
+            log.warn("No channels configured for userId: {}", subscribed.getUser().getId());
+            return;
+        }
+
+        channels.stream()
+                .map(channel -> buildNotification(subscribed, channel, message))
+                .forEach(this::handleNotification);
+    }
+
+    private Notification buildNotification(Subscribed subscribed, Channel channel, String message) {
+        return Notification.builder()
+                .user(subscribed.getUser())
+                .category(subscribed.getCategory())
+                .notificationType(channel.getNotificationType())
+                .notificationDate(Calendar.getInstance())
+                .message(message)
+                .build();
+    }
+
+    private void handleNotification(Notification notification) {
+        try {
+            notificationRepository.save(notification);
+            sendNotification(notification);
+        } catch (Exception e) {
+            log.error("Failed to handle notification for userId: {}, type: {}",
+                    notification.getUser().getId(), notification.getNotificationType(), e);
         }
     }
 
-    /**
-     * Get a list of notifications to be sent to the users
-     * @param subscribed
-     * @param message
-     * @return
-     */
-    private List<Notification> getNotificationsForUser(final Subscribed subscribed, final String message) {
+    private void sendNotification(Notification notification) {
+        AbstractNotification notifyImpl = notificationAbstractFactory.getNotification(notification.getNotificationType());
 
-        List<Notification> notifications = new LinkedList<>();
-
-        List<Channel> channelsForUser = channelRepository.findAllByUserId(subscribed.getUser().getId());
-
-        for (Channel channel : channelsForUser){
-            Notification notification = new Notification();
-            notification.setUser(subscribed.getUser());
-            notification.setCategory(subscribed.getCategory());
-            notification.setNotificationDate(Calendar.getInstance());
-            notification.setMessage(message);
-            notification.setNotificationType(channel.getNotificationType());
-            notifications.add(notification);
+        if (notifyImpl == null) {
+            log.error("No implementation found for notificationType: {} (userId: {})",
+                    notification.getNotificationType(), notification.getUser().getId());
+            return;
         }
 
-        return notifications;
+        try {
+            notifyImpl.notifySubscribed(notification.getUser(), notification.getMessage());
+            log.info("Notification sent successfully to userId: {} via {}",
+                    notification.getUser().getId(), notification.getNotificationType());
+        } catch (Exception e) {
+            log.error("Error sending notification to userId: {} via {}",
+                    notification.getUser().getId(), notification.getNotificationType(), e);
+        }
     }
-
 }

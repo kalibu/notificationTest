@@ -29,7 +29,7 @@ public class NotificationServiceTest {
     private NotificationService notificationService;
 
     @Test
-    public void testGetAllNotificationOrderedFromNewest(){
+    public void testGetAllNotificationOrderedFromNewest() {
 
         User user = new User();
         user.setName("name");

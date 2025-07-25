@@ -1,13 +1,10 @@
 package test.david.notificationTest.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
-import test.david.notificationTest.dto.NotificationDTO;
 import test.david.notificationTest.dto.SendNotificationDTO;
 import test.david.notificationTest.entity.Channel;
 import test.david.notificationTest.entity.Notification;
@@ -21,7 +18,6 @@ import test.david.notificationTest.repository.SubscribedRepository;
 import test.david.notificationTest.repository.UserRepository;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 @SpringBootTest
@@ -43,7 +39,7 @@ public class SendNotificationServiceTest {
     private SendNotificationService sendNotificationService;
 
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
         notificationRepository.deleteAll();
         channelRepository.deleteAll();
         subscribedRepository.deleteAll();
@@ -51,7 +47,7 @@ public class SendNotificationServiceTest {
     }
 
     @Test
-    public void testSendNotificationsNoNotificationTypeOnDB(){
+    public void testSendNotificationsNoNotificationTypeOnDB() {
 
         User user = new User();
         user.setName("David");
@@ -79,7 +75,7 @@ public class SendNotificationServiceTest {
     }
 
     @Test
-    public void testSendNotificationsOneNotification(){
+    public void testSendNotificationsOneNotification() {
 
         User user = new User();
         user.setName("David");
@@ -108,7 +104,7 @@ public class SendNotificationServiceTest {
     }
 
     @Test
-    public void testSendNotificationsMoreThanOnNotificationMethod(){
+    public void testSendNotificationsMoreThanOnNotificationMethod() {
 
         User user = new User();
         user.setName("David");
@@ -144,7 +140,7 @@ public class SendNotificationServiceTest {
     }
 
     @Test
-    public void testSendNotificationsMoreThanOnCategory(){
+    public void testSendNotificationsMoreThanOnCategory() {
 
         User user = new User();
         user.setName("David");

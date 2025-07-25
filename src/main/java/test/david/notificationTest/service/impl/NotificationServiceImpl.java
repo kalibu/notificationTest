@@ -1,7 +1,7 @@
 package test.david.notificationTest.service.impl;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import test.david.notificationTest.dto.NotificationDTO;
 import test.david.notificationTest.entity.Notification;
@@ -17,7 +17,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    public List<NotificationDTO> getAllNotificationOrderedFromNewest(){
+    public List<NotificationDTO> getAllNotificationOrderedFromNewest() {
         final Sort sortByNotificationDateDesc = Sort.by(Sort.Direction.DESC, "notificationDate");
         final List<Notification> notifications = notificationRepository.findAll(sortByNotificationDateDesc);
 

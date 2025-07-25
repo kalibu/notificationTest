@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import test.david.notificationTest.dto.NotificationDTO;
 import test.david.notificationTest.dto.SendNotificationDTO;
 import test.david.notificationTest.dto.SendNotificationReturnDTO;
 

@@ -11,7 +11,7 @@ public enum CategoryEnum {
     @Getter
     private final String description;
 
-    CategoryEnum(final String description){
+    CategoryEnum(final String description) {
         this.description = description;
     }
 }

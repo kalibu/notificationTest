@@ -1,0 +1,257 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-users
+      author: david
+      changes:
+        - createSequence:
+            sequenceName: USERS_SEQ
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: USERS
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: phone_number
+                  type: VARCHAR(14)
+        - addAutoIncrement:
+            columnName: user_id
+            tableName: USERS
+            generationType: SEQUENCE
+            sequenceName: USERS_SEQ
+            startWith: 1
+            incrementBy: 1
+
+  - changeSet:
+      id: 2-create-subscribed
+      author: david
+      changes:
+        - createSequence:
+            sequenceName: SUBSCRIBED_SEQ
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: SUBSCRIBED
+            columns:
+              - column:
+                  name: subscribed_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: VARCHAR(255)
+        - addAutoIncrement:
+            columnName: subscribed_id
+            tableName: SUBSCRIBED
+            generationType: SEQUENCE
+            sequenceName: SUBSCRIBED_SEQ
+            startWith: 1
+            incrementBy: 1
+        - addForeignKeyConstraint:
+            baseTableName: SUBSCRIBED
+            baseColumnNames: user_id
+            referencedTableName: USERS
+            referencedColumnNames: user_id
+            constraintName: fk_subscribed_user
+
+  - changeSet:
+      id: 3-create-notifications
+      author: david
+      changes:
+        - createSequence:
+            sequenceName: NOTIFICATIONS_SEQ
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: NOTIFICATIONS
+            columns:
+              - column:
+                  name: notification_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: VARCHAR(255)
+              - column:
+                  name: notification_type
+                  type: VARCHAR(255)
+              - column:
+                  name: notification_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: message
+                  type: VARCHAR(4000)
+                  constraints:
+                    nullable: false
+        - addAutoIncrement:
+            columnName: notification_id
+            tableName: NOTIFICATIONS
+            generationType: SEQUENCE
+            sequenceName: NOTIFICATIONS_SEQ
+            startWith: 1
+            incrementBy: 1
+        - addForeignKeyConstraint:
+            baseTableName: NOTIFICATIONS
+            baseColumnNames: user_id
+            referencedTableName: USERS
+            referencedColumnNames: user_id
+            constraintName: fk_notification_user
+
+  - changeSet:
+      id: 4-create-channels
+      author: david
+      changes:
+        - createSequence:
+            sequenceName: CHANNELS_SEQ
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: CHANNELS
+            columns:
+              - column:
+                  name: channel_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: notification_type
+                  type: VARCHAR(255)
+        - addAutoIncrement:
+            columnName: channel_id
+            tableName: CHANNELS
+            generationType: SEQUENCE
+            sequenceName: CHANNELS_SEQ
+            startWith: 1
+            incrementBy: 1
+        - addForeignKeyConstraint:
+            baseTableName: CHANNELS
+            baseColumnNames: user_id
+            referencedTableName: USERS
+            referencedColumnNames: user_id
+            constraintName: fk_channel_user
+
+  - changeSet:
+      id: 5-insert-users
+      author: david
+      changes:
+        - insert:
+            tableName: USERS
+            columns:
+              - column: { name: user_id, valueNumeric: 1 }
+              - column: { name: name, value: David }
+              - column: { name: email, value: david@test.com }
+              - column: { name: phone_number, value: "+5511999999999" }
+        - insert:
+            tableName: USERS
+            columns:
+              - column: { name: user_id, valueNumeric: 2 }
+              - column: { name: name, value: John }
+              - column: { name: email, value: john@test.com }
+              - column: { name: phone_number, value: "+5511888888888" }
+        - insert:
+            tableName: USERS
+            columns:
+              - column: { name: user_id, valueNumeric: 3 }
+              - column: { name: name, value: Peter }
+              - column: { name: email, value: peter@test.com }
+              - column: { name: phone_number, value: "+5511777777777" }
+        - insert:
+            tableName: USERS
+            columns:
+              - column: { name: user_id, valueNumeric: 4 }
+              - column: { name: name, value: Ana }
+              - column: { name: email, value: ana@test.com }
+              - column: { name: phone_number, value: "+5511666666666" }
+
+  - changeSet:
+      id: 6-insert-subscribed
+      author: david
+      changes:
+        - insert:
+            tableName: SUBSCRIBED
+            columns:
+              - column: { name: subscribed_id, valueNumeric: 1 }
+              - column: { name: user_id, valueNumeric: 1 }
+              - column: { name: category, value: SPORTS }
+        - insert:
+            tableName: SUBSCRIBED
+            columns:
+              - column: { name: subscribed_id, valueNumeric: 2 }
+              - column: { name: user_id, valueNumeric: 2 }
+              - column: { name: category, value: FINANCE }
+        - insert:
+            tableName: SUBSCRIBED
+            columns:
+              - column: { name: subscribed_id, valueNumeric: 3 }
+              - column: { name: user_id, valueNumeric: 3 }
+              - column: { name: category, value: MOVIES }
+        - insert:
+            tableName: SUBSCRIBED
+            columns:
+              - column: { name: subscribed_id, valueNumeric: 4 }
+              - column: { name: user_id, valueNumeric: 4 }
+              - column: { name: category, value: SPORTS }
+
+  - changeSet:
+      id: 7-insert-channels
+      author: david
+      changes:
+        - insert:
+            tableName: CHANNELS
+            columns:
+              - column: { name: channel_id, valueNumeric: 1 }
+              - column: { name: user_id, valueNumeric: 1 }
+              - column: { name: notification_type, value: SMS }
+        - insert:
+            tableName: CHANNELS
+            columns:
+              - column: { name: channel_id, valueNumeric: 2 }
+              - column: { name: user_id, valueNumeric: 2 }
+              - column: { name: notification_type, value: E_MAIL }
+        - insert:
+            tableName: CHANNELS
+            columns:
+              - column: { name: channel_id, valueNumeric: 3 }
+              - column: { name: user_id, valueNumeric: 3 }
+              - column: { name: notification_type, value: PUSH_NOTIFICATION }
+        - insert:
+            tableName: CHANNELS
+            columns:
+              - column: { name: channel_id, valueNumeric: 4 }
+              - column: { name: user_id, valueNumeric: 4 }
+              - column: { name: notification_type, value: PUSH_NOTIFICATION }
